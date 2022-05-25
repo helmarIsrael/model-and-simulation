@@ -235,7 +235,7 @@ infection_chance
 infection_chance
 0
 100
-100.0
+20.0
 1
 1
 percent
@@ -346,7 +346,7 @@ max_time
 max_time
 0
 50
-10.0
+25.0
 1
 1
 ticks
