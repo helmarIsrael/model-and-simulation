@@ -6,6 +6,7 @@ turtles-own[ ;; Turtle Characteristics
   communication?
   healthy?
   infected?
+  immune?
   partner
   time
   counter
@@ -23,6 +24,7 @@ to setup ;; Setup Simulation
     set communication? false
     set infected? false
     set healthy? false
+    set immune? false
     set counter (10 + random 25)
   ]
   ask one-of turtles [set virus? true]
@@ -33,6 +35,8 @@ end
 
 to go ;; Simulation run in each tick
   if all? turtles [virus?] [stop]
+  if all? turtles [virus? = false] [stop]
+  if all? turtles [immune?] [stop]
 
   ask turtles [ move ]
   ask turtles [ handshake ]
@@ -102,8 +106,8 @@ to leave ;; Leave the partner in a certain random time
   ]
 end
 
-to recolor ;; To color the virus based on their characteristics
-  ifelse virus? [set color red] [set color blue]
+to recolor ;; To color the virus based on their characteristics, and if the individual is infected, then the timer is set for the individual to become immune
+  ifelse virus? [set color red set time (min_time + random max_time) ] [set color blue]
   ifelse communication?
   [
     ifelse virus?
@@ -112,8 +116,15 @@ to recolor ;; To color the virus based on their characteristics
       set color orange
     ]
     [
-      set healthy? true
-      set color green
+      ifelse immune?
+      [
+        set healthy? true
+        set color violet
+      ]
+      [
+        set healthy? true
+        set color green
+      ]
     ]
   ]
   [
@@ -121,13 +132,14 @@ to recolor ;; To color the virus based on their characteristics
     set healthy? false
     set probability random 100
   ]
+  if immune? = true [set color violet]
 
 end
 
 to spread ;; When handshaking, there is a chance depending on the value of the slider that the turtle will be infected
-  ifelse virus? []
+  ifelse virus? and immune? = false []
   [
-    if any? other turtles-here with [virus?]
+    if any? other turtles-here with [virus?] and immune? = false
     [
       if probability <= infection_chance
       [
@@ -136,6 +148,16 @@ to spread ;; When handshaking, there is a chance depending on the value of the s
       ]
     ]
   ]
+  if virus? = true
+    [
+      set time time - 1
+      if time <= 0
+      [
+        set virus? false
+        set immune? true
+        recolor
+      ]
+    ]
 
 end
 
@@ -144,13 +166,13 @@ to reset ;; resets the counter in handshaking length of time
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
-619
+614
 10
-1184
-576
+1212
+609
 -1
 -1
-16.9
+17.9
 1
 10
 1
@@ -164,8 +186,8 @@ GRAPHICS-WINDOW
 16
 -16
 16
-0
-0
+1
+1
 1
 ticks
 30.0
@@ -213,17 +235,17 @@ infection_chance
 infection_chance
 0
 100
-50.0
+100.0
 1
 1
 percent
 HORIZONTAL
 
 PLOT
-16
-121
-603
-577
+17
+153
+604
+609
 Simulation
 NIL
 NIL
@@ -239,6 +261,7 @@ PENS
 "Infected" 1.0 0 -2674135 true "" "plot count turtles with [virus?]"
 "Healthy Interaction" 1.0 0 -14439633 true "" "plot count turtles with [healthy?]"
 "Infected Interaction" 1.0 0 -955883 true "" "plot count turtles with [infected?]"
+"Immune" 1.0 0 -10141563 true "" "plot count turtles with [immune?]"
 
 SLIDER
 16
@@ -256,10 +279,10 @@ turtles
 HORIZONTAL
 
 MONITOR
-484
-228
-602
-273
+485
+260
+603
+305
 Healthy
 number_of_turtles - count turtles with [virus?]
 17
@@ -267,10 +290,10 @@ number_of_turtles - count turtles with [virus?]
 11
 
 MONITOR
-484
-274
-602
-319
+485
+306
+603
+351
 Infected
 count turtles with [virus?]
 17
@@ -278,10 +301,10 @@ count turtles with [virus?]
 11
 
 MONITOR
-484
-320
-603
-365
+485
+352
+604
+397
 Healthy Interactions
 count turtles with [healthy?]
 17
@@ -289,12 +312,53 @@ count turtles with [healthy?]
 11
 
 MONITOR
-484
-366
-603
-411
+485
+398
+604
+443
 Infected Interactions
 count turtles with [infected?]
+17
+1
+11
+
+SLIDER
+16
+118
+305
+151
+min_time
+min_time
+1
+50
+10.0
+1
+1
+ticks
+HORIZONTAL
+
+SLIDER
+307
+118
+604
+151
+max_time
+max_time
+0
+50
+10.0
+1
+1
+ticks
+HORIZONTAL
+
+MONITOR
+485
+444
+603
+489
+Immune
+count turtles with [immune?]
 17
 1
 11
