@@ -168,11 +168,11 @@ end
 GRAPHICS-WINDOW
 614
 10
-1257
-654
+1088
+485
 -1
 -1
-19.242424242424246
+14.121212121212123
 1
 10
 1
@@ -244,8 +244,8 @@ HORIZONTAL
 PLOT
 17
 153
-604
-609
+481
+481
 Simulation
 NIL
 NIL
@@ -279,10 +279,10 @@ turtles
 HORIZONTAL
 
 MONITOR
-17
-609
-135
-654
+483
+153
+601
+198
 Healthy
 number_of_turtles - count turtles with [virus?]
 17
@@ -290,10 +290,10 @@ number_of_turtles - count turtles with [virus?]
 11
 
 MONITOR
-136
-609
-254
-654
+483
+199
+601
+244
 Infected
 count turtles with [virus?]
 17
@@ -301,10 +301,10 @@ count turtles with [virus?]
 11
 
 MONITOR
-255
-609
-374
-654
+483
+246
+602
+291
 Healthy Interactions
 count turtles with [healthy?]
 17
@@ -312,10 +312,10 @@ count turtles with [healthy?]
 11
 
 MONITOR
-375
-609
-494
-654
+483
+293
+602
+338
 Infected Interactions
 count turtles with [infected?]
 17
@@ -353,10 +353,10 @@ ticks
 HORIZONTAL
 
 MONITOR
-494
-609
-604
-654
+483
+339
+602
+384
 Immune
 count turtles with [immune?]
 17
